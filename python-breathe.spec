@@ -1,8 +1,9 @@
+# NOTE: for versions >= 4.13 (for python3/Sphinx 2) see python3-breathe.spec
 #
 # Conditional build:
 %bcond_without	tests	# nose tests
 %bcond_without	python2 # CPython 2.x module
-%bcond_without	python3 # CPython 3.x module
+%bcond_with	python3 # CPython 3.x module (built from python3-breathe.spec)
 
 Summary:	Sphinx Doxygen renderer
 Summary(pl.UTF-8):	Renderer Doxygena dla systemu dokumentacji Sphinx
@@ -111,13 +112,16 @@ ln -sf breathe-apidoc-3 $RPM_BUILD_ROOT%{_bindir}/breathe-apidoc
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%if %{with python2}
 %files
 %defattr(644,root,root,755)
 %doc LICENSE README.rst
 %attr(755,root,root) %{_bindir}/breathe-apidoc-2
 %{py_sitescriptdir}/breathe
 %{py_sitescriptdir}/breathe-%{version}-py*.egg-info
+%endif
 
+%if %{with python3}
 %files -n python3-breathe
 %defattr(644,root,root,755)
 %doc LICENSE README.rst
@@ -125,3 +129,4 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/breathe-apidoc-3
 %{py3_sitescriptdir}/breathe
 %{py3_sitescriptdir}/breathe-%{version}-py*.egg-info
+%endif
